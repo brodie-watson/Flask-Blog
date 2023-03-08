@@ -22,16 +22,35 @@
         <div class="collapse navbar-collapse" id="navbar">
           <div class="navbar-nav">
             <a class="nav-item nav-link" href="/home">Home</a>
-            <a class="nav-item nav-link" href="/login">Login</a>
-            <a class="nav-item nav-link" href="/sign-up">Sign-Up</a>
+            {% if user.is_authenticated %}
             <a class="nav-item nav-link" href="/logout">Logout</a>
-            
+            {% else %}
+            <a class="nav-item nav-link" href="/sign-up">Sign-Up</a>
+            <a class="nav-item nav-link" href="/login">Login</a>
+            {% endif %}
           </div>
         </div>
       </div>
     </nav>
 
-    
+    {% with messages = get_flashed_messages(with_categories=True)%}
+    {% if messages %}
+      {% for category, message in messages %}
+      {% if category == 'error' %}
+      <div class="alert alert-danger alert-dismissable fade-show" role="alert">
+        {{ message }}
+        <button class="btn-close" type="button" data-bs-dismiss="alert"></button>
+      </div>
+      {% endif %}
+      {% if category == 'success' %}
+      <div class="alert alert-success alert-dismissable fade-show" role="alert">
+        {{ message }}
+        <button class="btn-close" type="button" data-bs-dismiss="alert"></button>
+      </div>
+      {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
     <div class="container">
       {% block content %} 
       {% endblock %}
